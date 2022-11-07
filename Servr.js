@@ -1,4 +1,5 @@
 const express = require('express')
+const cors = require('cors')
 
 const TelegramBot = require('node-telegram-bot-api');
 const token = '5742569474:AAFObbHXPRiWMjlpyKbxL-_0reCIuVC-Lyg';
@@ -13,13 +14,17 @@ app.use(cors())
 app.use(express.json());
 
 app.post('/telegram', function(request, response){
-    bot.on('message', (msg) => {
-        console.log(request.body);
+        const html = `
+                <b>${request.body.username}</b>
+                ${request.body.order}
+                ${request.body.clients}
+        `
 
-        bot.sendMessage(chatId, 'Test');
-        // your JSON
+        bot.sendMessage(chatId, html, {
+                parse_mode: 'html'
+        });
+
         response.send(request.body);
-    });
 });
 
 app.listen(8000)
